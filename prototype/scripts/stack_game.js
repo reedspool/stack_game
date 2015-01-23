@@ -10,26 +10,35 @@ GAME = (function () {
   };
 
   var LEVELS = {
-    1: {
-      rooms: {
-        1: {
-          value: BLANK_VALUE
+    A: { 
+      1: {
+        rooms: {
+          1: {
+            value: BLANK_VALUE
+          },
+          2: {
+            value: BLANK_VALUE
+          },
+          3: {
+            value: '#b150ec'
+          }
         },
-        2: {
-          value: BLANK_VALUE
+        player: {
+          room: 1,
+          value: '#3f62e7'
         },
-        3: {
-          value: '#b150ec'
-        }
+        condition: function (state) { 
+          return state.rooms[1].value == '#b150ec'
+                && state.rooms[3].value == BLANK_VALUE
+        },
+        conditionSatisfied: false
       },
-      player: {
-        room: 1
-      },
-      condition: function (state) { 
-        return state.rooms[1].value == '#b150ec'
-              && state.rooms[3].value == BLANK_VALUE
-      },
-      conditionSatisfied: false
+      2: {
+
+      }
+    },
+    B: {
+      
     }
   };
 
@@ -51,6 +60,14 @@ GAME = (function () {
   function _setRoomValue(room, a) { _currentState.rooms[room].value = a; }
   function _setConditionSatisfied(satisfied) { _currentState.conditionSatisfied = satisfied}
   function _incrementMoves() { _currentState.moves++; }
+
+  // Event
+  function guiEvent(type, stuff) { 
+    GAME_GUI.animationBus.push({
+      type: type,
+      state: state()
+    })
+  }
 
   function setupLevel(level) {
     level = level || 1;
@@ -76,12 +93,7 @@ GAME = (function () {
     _currentState = initial;
 
     // Finally, use the setup state to read everything;
-    GAME_GUI.animationBus.push({
-      type: 'levelSetup',
-      state: state(),
-      value: _getCurrentRoomValue(),
-      room: _currentPlayerRoom()
-    });
+    guiEvent('levelSetup')
   }
 
   function act(action) {
@@ -109,36 +121,21 @@ GAME = (function () {
 
     var newRoom = _currentPlayerRoom() + motion;
 
-    GAME_GUI.animationBus.push({
-      type: 'playerMove',
-      room: newRoom
-    })
+    guiEvent('playerMove')
 
     _setCurrentPlayerRoom(newRoom)
   }
 
   function _read(action) {
-    GAME_GUI.animationBus.push({
-      type: 'playerRead',
-      value: _getCurrentRoomValue(),
-      state: state(),
-      room: _currentPlayerRoom()
-    });
+    guiEvent('playerRead')
 
     _setCurrentPlayerValue(_getCurrentRoomValue());
-    _blankCurrentRoomValue();
   }
 
   function _write(action) {
-    GAME_GUI.animationBus.push({
-      type: 'playerWrite',
-      state: state(),
-      value: _currentPlayerValue(),
-      room: _currentPlayerRoom()
-    })
+    guiEvent('playerWrite')
 
     _setCurrentRoomValue(_currentPlayerValue());
-    _blankPlayerValue();
   }
 
   function state() {

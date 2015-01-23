@@ -5,8 +5,8 @@ GAME_GUI = (function () {
   var player;
   var selectRooms = '.S-room';
   var rooms;
-  var width = 590;
-  var height = 303;
+  var width = 600;
+  var height = 400;
 
   var duration = 350;
   var delay = 0;
@@ -85,6 +85,28 @@ GAME_GUI = (function () {
 
   }
 
+  function wordsFromGame() {
+    return $(document).asEventStream('keyup')
+          .map('.keyCode')
+          .map(function (code) {
+            switch(code) {
+              case 37: // LEFT
+                return 'left'
+              case 39: // RIGHT
+                return 'right'
+              case 90: // Z
+                return 'read'
+              case 88: // X
+                return 'write'
+              default:
+                return '';
+            }
+          })
+          .filter(function (d) { 
+            return d;
+          })
+  }
+
   function register(what) {
     return animationBus.filter(function (d) { return d.type == what; })
   }
@@ -125,9 +147,7 @@ GAME_GUI = (function () {
         .duration(duration)
           .select('rect')
           .attr('fill', function (d, i) { 
-            return i + 1 == room
-                    ? BLANK_FILL
-                    : colorFromValue(state.rooms[i + 1].value);
+            return colorFromValue(state.rooms[i + 1].value);
           })
 
       player
@@ -147,20 +167,13 @@ GAME_GUI = (function () {
       rooms
         .transition()
         .delay(delay)
-        .duration(duration)
+          .duration(duration)
           .select('rect')
           .attr('fill', function (d, i) { 
             return i + 1 == room
                     ? value
                     : colorFromValue(state.rooms[i + 1].value);
           })
-
-      player
-        .transition()
-        .delay(delay)
-        .duration(duration)
-          .select('rect')
-          .attr('stroke', BLANK_FILL)
     })
 
 
@@ -178,7 +191,8 @@ GAME_GUI = (function () {
 
   return {
     setup: setup,
-    animationBus: animationBus
+    animationBus: animationBus,
+    wordsFromGame: wordsFromGame
   }
 })()
 
