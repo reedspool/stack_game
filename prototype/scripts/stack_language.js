@@ -50,6 +50,8 @@ LANG = (function () {
       executeValue(t);
     } else if (t.type == 'operator') {
       executeOperator(t);
+    } else if (t.type == 'action') {
+      executeAction(t);
     }
 
     return t;
@@ -101,14 +103,17 @@ LANG = (function () {
     stack.push(resultToken);
   }
 
-
+  function executeAction(token) {
+    GAME.act(token);
+  }
 
 // Break this into more streams -> then it will be easy to read off animations from each stream
 // 
 // "You could have invented it yourself" http://stackoverflow.com/questions/1028250/what-is-functional-reactive-programming
   function tokenize(word) {
     // First match group is operators, second match group is values. Reserving a lot more than I'm implementing. See execute()
-    var reTokens = /(\+|\-|\/|\*|\x|\^)|(\d+(.\d*)?(e\d*)?)/i;
+    // For game, reserving game tokens
+    var reTokens = /(\+|\-|\/|\*|\x|\^)|(\d+(.\d*)?(e\d*)?)|(right|left|read|write)/i;
     
     var matchTokens = word.value.match(reTokens);
     
@@ -127,6 +132,7 @@ LANG = (function () {
     
     var operator = matchTokens[1];
     var number = matchTokens[2];
+    var action = matchTokens[5];
     
     if (operator) {
       token.type = 'operator';
@@ -134,6 +140,9 @@ LANG = (function () {
     } else if (number) {
       token.type = 'number';
       token.value = parseFloat(number, 10);
+    } else if (action) {
+      token.type = 'action';
+      token.value = action;
     }
     
     return token;
