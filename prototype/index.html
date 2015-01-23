@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prototype Stack Game</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles/global.css">
+</head>
+<body>
+  <h1>Stack Game Prototype</h1>
+
+  
+  <p>This is an animation of a stack based programming language. Postfix notation is used, so if you want to add two and two, type <code>2 2 +</code>
+  </p>
+
+  <p>If you don't know where to start, try typing this, slowly:</p>
+  <pre>88 99 * 3 +</pre>
+  <p>Here &rarr; <input type="text" class="input" value="input"></p>
+
+  <svg id="playground" height="" width="" ></svg>
+
+  <div class="colContainer">
+    <div class="col2">
+      <p>Input so far:</p>
+      <div><span class="output"></span></div>
+    </div>
+    <div class="col2">
+      <p>Most recent output:</p>
+      <div class="stackOutput"></div>
+    </div>
+  </div>
+
+  <!-- Vendor Scripts -->
+  <script src="scripts/vendor/jquery-2.1.1.js"></script>
+  <script src="scripts/vendor/Bacon.js"></script>
+  <script src="scripts/vendor/Bacon.UI.js"></script>
+  <script src="scripts/vendor/d3.js"></script>
+    <script src="scripts/vendor/lodash.js"></script>
+
+
+  <!-- User Scripts -->
+ <script src="scripts/gui.js"></script>
+  <script src="scripts/stack_language.js"></script>
+  <script src="scripts/baconjs_d3.js"></script>
+
+</body>
+</html>
