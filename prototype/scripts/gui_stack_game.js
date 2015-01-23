@@ -137,9 +137,9 @@ GAME_GUI = (function () {
 
   register('playerRead')
     .onValue(function (evt) {
-      var room = evt.room;
-      var value = evt.value;
       var state = evt.state;
+      var room = state.player.room;
+      var value = state.player.value;
 
       rooms
         .transition()
@@ -160,9 +160,8 @@ GAME_GUI = (function () {
 
   register('playerWrite')
     .onValue(function (evt) {
-      var room = evt.room;
-      var value = evt.value;
       var state = evt.state;
+      var room = state.player.room;
 
       rooms
         .transition()
@@ -170,16 +169,15 @@ GAME_GUI = (function () {
           .duration(duration)
           .select('rect')
           .attr('fill', function (d, i) { 
-            return i + 1 == room
-                    ? value
-                    : colorFromValue(state.rooms[i + 1].value);
+            return colorFromValue(state.rooms[i + 1].value);
           })
     })
 
 
   register('playerMove')
     .onValue(function (evt) {
-      var room = evt.room;
+      var state = evt.state;
+      var room = state.player.room
 
       player
         .transition()

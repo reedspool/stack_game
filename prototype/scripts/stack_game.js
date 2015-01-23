@@ -10,35 +10,27 @@ GAME = (function () {
   };
 
   var LEVELS = {
-    A: { 
-      1: {
-        rooms: {
-          1: {
-            value: BLANK_VALUE
-          },
-          2: {
-            value: BLANK_VALUE
-          },
-          3: {
-            value: '#b150ec'
-          }
+    1: {
+      rooms: {
+        1: {
+          value: BLANK_VALUE
         },
-        player: {
-          room: 1,
-          value: '#3f62e7'
+        2: {
+          value: BLANK_VALUE
         },
-        condition: function (state) { 
-          return state.rooms[1].value == '#b150ec'
-                && state.rooms[3].value == BLANK_VALUE
-        },
-        conditionSatisfied: false
+        3: {
+          value: '#b150ec'
+        }
       },
-      2: {
-
-      }
-    },
-    B: {
-      
+      player: {
+        room: 1,
+        value: '#3f62e7'
+      },
+      condition: function (state) { 
+        return state.rooms[1].value == '#b150ec'
+              && state.rooms[3].value == BLANK_VALUE
+      },
+      conditionSatisfied: false
     }
   };
 
@@ -101,19 +93,26 @@ GAME = (function () {
       case 'right':
       case 'left':
         _movePlayer(action)
+        guiEvent('playerMove')
         break;
       case 'read':
         _read(action)
+        guiEvent('playerRead')
         break;
       case 'write':
         _write(action)
+        guiEvent('playerWrite')
         break;
       default:
         throw new Error('Tried to act, couldn\'t', action)
     }
 
     _incrementMoves();
-    _setConditionSatisfied(_checkWinCondition());
+
+    if (_checkWinCondition()) {
+      _setConditionSatisfied(true);
+      guiEvent('levelWon')
+    }
   }
 
   function _movePlayer(action) {
@@ -121,20 +120,14 @@ GAME = (function () {
 
     var newRoom = _currentPlayerRoom() + motion;
 
-    guiEvent('playerMove')
-
     _setCurrentPlayerRoom(newRoom)
   }
 
   function _read(action) {
-    guiEvent('playerRead')
-
     _setCurrentPlayerValue(_getCurrentRoomValue());
   }
 
   function _write(action) {
-    guiEvent('playerWrite')
-
     _setCurrentRoomValue(_currentPlayerValue());
   }
 
