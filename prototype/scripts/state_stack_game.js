@@ -38,6 +38,7 @@ GAME_STATE = (function () {
   };
 
   // Brainstorming what levels would look like if built entirely thru concatenative language
+  /* 
   var LEVELS_CODE = '
     [ # rooms
       /config/colors/primary 
@@ -75,6 +76,8 @@ GAME_STATE = (function () {
       }
     }
   }
+
+  */
 
   /* End Stuff that should really be in a separate data/config file */
 
@@ -126,6 +129,7 @@ GAME_STATE = (function () {
   return {
     state: _state,
     setupLevel: _setupLevel,
+    movePlayerInDirection: _movePlayerInDirection,
     checkWinCondition: _checkWinCondition,
     getCurrentRoomValue: _getCurrentRoomValue,
     currentPlayerValue: _currentPlayerValue,
